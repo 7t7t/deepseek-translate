@@ -1,0 +1,92 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  width: 300px;
+  margin: 0;
+  padding: 12px 14px 14px;
+  color: #1f2329;
+  font: 13px/1.5 system-ui, -apple-system, 'Segoe UI', 'Microsoft YaHei', sans-serif;
+}
+
+header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+header img {
+  width: 20px;
+  height: 20px;
+}
+
+.title {
+  flex: 1;
+  font-weight: 600;
+}
+
+button {
+  font: inherit;
+  cursor: pointer;
+}
+
+button.link {
+  padding: 0;
+  color: #4d6bfe;
+  background: none;
+  border: 0;
+}
+
+button.primary {
+  width: 100%;
+  padding: 8px 0;
+  color: #fff;
+  font-weight: 600;
+  background: #4d6bfe;
+  border: 0;
+  border-radius: 6px;
+}
+
+button.primary:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+label {
+  display: block;
+  margin-top: 12px;
+  color: #4e5969;
+}
+
+select {
+  display: block;
+  width: 100%;
+  margin-top: 4px;
+  padding: 5px 8px;
+  font: inherit;
+  border: 1px solid #d0d3d9;
+  border-radius: 6px;
+}
+
+.host {
+  color: #86909c;
+}
+
+.hint {
+  margin: 10px 0 0;
+  color: #86909c;
+  font-size: 12px;
+}
+
+kbd {
+  padding: 0 5px;
+  background: #f0f1f5;
+  border: 1px solid #d0d3d9;
+  border-radius: 4px;
+}
+
+#noKey p {
+  margin: 0 0 10px;
+}

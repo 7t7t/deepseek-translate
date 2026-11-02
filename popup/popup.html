@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="popup.css" />
+  </head>
+  <body>
+    <header>
+      <img src="../icons/icon32.png" alt="" />
+      <span class="title">DeepSeek 双语翻译</span>
+      <button id="openOptions" class="link" type="button">设置</button>
+    </header>
+
+    <section id="noKey" hidden>
+      <p>尚未配置 DeepSeek API Key</p>
+      <button id="goOptions" class="primary" type="button">去设置</button>
+    </section>
+
+    <section id="main" hidden>
+      <button id="toggle" class="primary" type="button">翻译本页</button>
+      <p id="unsupported" class="hint" hidden>当前页面不支持翻译</p>
+      <label>目标语言<select id="targetLang"></select></label>
+      <label>
+        本站规则 <span id="host" class="host"></span>
+        <select id="siteRule">
+          <option value="">默认</option>
+          <option value="always">总是翻译本站</option>
+          <option value="never">永不翻译本站</option>
+        </select>
+      </label>
+      <p class="hint">快捷键：<kbd id="shortcut">Alt+A</kbd></p>
+    </section>
+
+    <script src="../lib/utils.js"></script>
+    <script src="../lib/storage.js"></script>
+    <script src="popup.js"></script>
+  </body>
+</html>
