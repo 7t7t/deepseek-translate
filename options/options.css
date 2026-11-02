@@ -1,0 +1,142 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  color: #1f2329;
+  font: 14px/1.6 system-ui, -apple-system, 'Segoe UI', 'Microsoft YaHei', sans-serif;
+  background: #f5f6f8;
+}
+
+main {
+  max-width: 720px;
+  margin: 32px auto;
+  padding: 0 16px;
+}
+
+h1 {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 22px;
+}
+
+h1 img {
+  width: 32px;
+  height: 32px;
+}
+
+h2 {
+  margin: 0 0 12px;
+  font-size: 16px;
+}
+
+section {
+  margin-bottom: 16px;
+  padding: 20px;
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+}
+
+label {
+  display: block;
+  margin-bottom: 14px;
+  font-weight: 500;
+}
+
+label.check {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 400;
+}
+
+input[type='text'],
+input[type='password'],
+input[type='number'],
+select,
+textarea {
+  display: block;
+  width: 100%;
+  margin-top: 6px;
+  padding: 7px 10px;
+  font: inherit;
+  border: 1px solid #d0d3d9;
+  border-radius: 6px;
+  outline: none;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  border-color: #4d6bfe;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.row input {
+  flex: 1;
+}
+
+small,
+.hint {
+  display: block;
+  margin-top: 4px;
+  color: #86909c;
+  font-size: 12px;
+  font-weight: 400;
+}
+
+button {
+  padding: 6px 14px;
+  font: inherit;
+  white-space: nowrap;
+  background: #fff;
+  border: 1px solid #d0d3d9;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+button.primary {
+  color: #fff;
+  background: #4d6bfe;
+  border-color: #4d6bfe;
+}
+
+button:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
+.row input,
+.row button {
+  margin-top: 6px;
+}
+
+.saved {
+  margin-left: auto;
+  color: #00a870;
+  font-size: 13px;
+  font-weight: 400;
+}
+
+.ok {
+  color: #00a870;
+}
+
+.err {
+  color: #e5484d;
+}
+
+kbd {
+  padding: 1px 6px;
+  background: #f0f1f5;
+  border: 1px solid #d0d3d9;
+  border-radius: 4px;
+}

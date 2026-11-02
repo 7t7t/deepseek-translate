@@ -1,0 +1,51 @@
+{
+  "manifest_version": 3,
+  "name": "DeepSeek 双语翻译",
+  "version": "0.1.0",
+  "description": "使用你自己的 DeepSeek API Key，进行网页双语对照翻译、划词翻译和输入框翻译。",
+  "icons": {
+    "16": "icons/icon16.png",
+    "32": "icons/icon32.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+  "action": {
+    "default_title": "DeepSeek 双语翻译",
+    "default_popup": "popup/popup.html",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "32": "icons/icon32.png"
+    }
+  },
+  "options_ui": {
+    "page": "options/options.html",
+    "open_in_tab": true
+  },
+  "background": {
+    "service_worker": "background.js"
+  },
+  "permissions": ["storage", "activeTab", "scripting", "contextMenus"],
+  "host_permissions": ["<all_urls>"],
+  "commands": {
+    "toggle-page": {
+      "suggested_key": { "default": "Alt+A" },
+      "description": "翻译本页 / 显示原文"
+    }
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": [
+        "lib/utils.js",
+        "lib/storage.js",
+        "content/common.js",
+        "content/page.js",
+        "content/selection.js",
+        "content/input.js"
+      ],
+      "css": ["content/content.css"],
+      "run_at": "document_idle",
+      "all_frames": false
+    }
+  ]
+}

@@ -1,0 +1,68 @@
+.dst-translation {
+  font: inherit;
+  color: inherit;
+}
+
+.dst-translation .dst-text {
+  white-space: pre-line;
+  opacity: 0.85;
+}
+
+.dst-translation.dst-block .dst-text {
+  display: inline-block;
+  margin-top: 0.25em;
+  padding-left: 0.5em;
+  border-left: 2px solid rgba(77, 107, 254, 0.55);
+}
+
+.dst-translation.dst-inline {
+  margin-left: 0.4em;
+}
+
+html.dst-hide .dst-translation {
+  display: none !important;
+}
+
+.dst-spinner {
+  display: inline-block;
+  width: 0.8em;
+  height: 0.8em;
+  margin-left: 0.3em;
+  vertical-align: middle;
+  border: 2px solid rgba(77, 107, 254, 0.25);
+  border-top-color: #4d6bfe;
+  border-radius: 50%;
+  animation: dst-spin 0.8s linear infinite;
+}
+
+@keyframes dst-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.dst-retry {
+  margin-left: 0.3em;
+  color: #e5484d;
+  font-size: 0.85em;
+  cursor: pointer;
+}
+
+.dst-toast {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  z-index: 2147483647;
+  max-width: 360px;
+  padding: 10px 14px;
+  color: #fff;
+  font: 13px/1.5 system-ui, -apple-system, 'Segoe UI', 'Microsoft YaHei', sans-serif;
+  background: #1f2329;
+  border-radius: 8px;
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.2);
+}
+
+.dst-input-loading {
+  opacity: 0.6 !important;
+  cursor: progress !important;
+}

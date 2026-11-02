@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <title>DeepSeek 双语翻译 - 设置</title>
+    <link rel="stylesheet" href="options.css" />
+  </head>
+  <body>
+    <main>
+      <h1>
+        <img src="../icons/icon48.png" alt="" />
+        DeepSeek 双语翻译
+        <span id="saved" class="saved" hidden>已保存</span>
+      </h1>
+
+      <section>
+        <h2>API 设置</h2>
+        <label>
+          API Key
+          <span class="row">
+            <input id="apiKey" type="password" placeholder="sk-..." autocomplete="off" spellcheck="false" />
+            <button id="toggleKey" type="button">显示</button>
+          </span>
+          <small>
+            在
+            <a href="https://platform.deepseek.com/api_keys" target="_blank" rel="noreferrer">platform.deepseek.com</a>
+            创建。Key 仅保存在本机浏览器中，只发送给下方的 Base URL。
+          </small>
+        </label>
+        <label>
+          Base URL
+          <input id="baseUrl" type="text" placeholder="https://api.deepseek.com" spellcheck="false" />
+        </label>
+        <label>
+          模型
+          <input id="model" type="text" list="models" spellcheck="false" />
+          <datalist id="models">
+            <option value="deepseek-chat"></option>
+            <option value="deepseek-reasoner"></option>
+          </datalist>
+        </label>
+        <div class="row">
+          <button id="test" type="button" class="primary">测试连接</button>
+          <span id="testResult"></span>
+        </div>
+      </section>
+
+      <section>
+        <h2>翻译偏好</h2>
+        <label>网页 / 划词目标语言<select id="targetLang"></select></label>
+        <label>输入框翻译目标语言<select id="inputTargetLang"></select></label>
+        <label class="check"><input id="enableSelection" type="checkbox" />启用划词翻译</label>
+        <label class="check">
+          <input id="enableInput" type="checkbox" />启用输入框翻译（在输入框中 500ms 内连按三次空格）
+        </label>
+        <label>最大并发请求数<input id="maxConcurrency" type="number" min="1" max="10" /></label>
+      </section>
+
+      <section>
+        <h2>站点规则</h2>
+        <p class="hint">每行一个域名，同时匹配其子域名，例如 example.com 也匹配 docs.example.com。</p>
+        <label>总是翻译<textarea id="alwaysSites" rows="5" spellcheck="false"></textarea></label>
+        <label>永不翻译<textarea id="neverSites" rows="5" spellcheck="false"></textarea></label>
+      </section>
+
+      <section>
+        <h2>快捷键</h2>
+        <p>翻译本页 / 显示原文：<kbd id="shortcut">Alt+A</kbd></p>
+        <button id="shortcuts" type="button">修改快捷键</button>
+      </section>
+    </main>
+    <script src="../lib/utils.js"></script>
+    <script src="../lib/storage.js"></script>
+    <script src="options.js"></script>
+  </body>
+</html>
