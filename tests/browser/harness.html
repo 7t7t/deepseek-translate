@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>DST content-script harness</title>
+    <link rel="stylesheet" href="../../content/content.css" />
+    <!-- 手工 / 自动化测试用：用假的 chrome.* 加载 content scripts，不需要安装扩展 -->
+    <script>
+      window.__cfg = {
+        hasKey: true,
+        targetLang: 'zh-CN',
+        inputTargetLang: 'en',
+        enableSelection: true,
+        enableInput: true,
+        alwaysSites: [],
+        neverSites: [],
+      }
+      window.__requests = []
+      window.__fail = false
+      const listeners = []
+      window.chrome = {
+        runtime: {
+          id: 'stub',
+          onMessage: {
+            addListener: (fn) => listeners.push(fn),
+            removeListener: (fn) => listeners.splice(listeners.indexOf(fn), 1),
+          },
+          async sendMessage(msg) {
+            if (msg.type === 'getConfig') return { ok: true, config: window.__cfg }
+            if (msg.type === 'translate') {
+              window.__requests.push(msg.texts)
+              await new Promise((r) => setTimeout(r, 50))
+              if (window.__fail) return { ok: false, error: 'API Key 无效', code: 'auth' }
+              return { ok: true, results: msg.texts.map((t) => '译:' + t) }
+            }
+            return { ok: false, error: 'unknown' }
+          },
+        },
+      }
+      // 无头 Chrome 的 virtual time 下 IntersectionObserver 不回调：自动测试时换成按可见性轮询的替身
+      if (location.search.includes('autotest')) {
+        window.IntersectionObserver = class {
+          constructor(cb) {
+            this.cb = cb
+            this.els = new Set()
+            this.timer = setInterval(() => {
+              const entries = [...this.els]
+                .filter((el) => el.checkVisibility())
+                .map((target) => ({ target, isIntersecting: true }))
+              if (entries.length) this.cb(entries, this)
+            }, 100)
+          }
+          observe(el) {
+            this.els.add(el)
+          }
+          unobserve(el) {
+            this.els.delete(el)
+          }
+          disconnect() {
+            this.els.clear()
+            clearInterval(this.timer)
+          }
+        }
+      }
+      // 模拟后台发消息给页面
+      window.__dispatch = (msg) =>
+        new Promise((resolve) => {
+          let async = false
+          for (const fn of [...listeners]) if (fn(msg, {}, resolve) === true) async = true
+          if (!async) setTimeout(() => resolve(undefined), 0)
+        })
+    </script>
+  </head>
+  <body>
+    <h1>Harness heading</h1>
+    <p id="p1">The quick brown fox jumps over the lazy dog.</p>
+    <p id="p2">今天天气很好，适合出门散步。</p>
+    <p id="p3"><a href="#nowhere" id="link">A paragraph inside a link</a></p>
+    <details id="det"><summary>More</summary><p id="hiddenP">Hidden paragraph revealed later.</p></details>
+    <pre>const code = 'do not translate'</pre>
+    <div id="dyn"></div>
+    <textarea id="ta" style="width: 300px; height: 60px"></textarea>
+    <script src="../../lib/utils.js"></script>
+    <script src="../../content/common.js"></script>
+    <script src="../../content/page.js"></script>
+    <script src="../../content/selection.js"></script>
+    <script src="../../content/input.js"></script>
+    <script>
+      if (location.search.includes('autotest')) {
+        const s = document.createElement('script')
+        s.src = 'autotest.js'
+        document.body.appendChild(s)
+      }
+    </script>
+  </body>
+</html>

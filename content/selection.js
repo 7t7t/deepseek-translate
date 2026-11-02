@@ -114,7 +114,8 @@
     dst.textContent = '翻译中…'
     const token = ++seq
     try {
-      const [result] = await D.translate([text], D.config.targetLang)
+      // 扩展失效时 config 可能未加载，D.translate 会给出「扩展已更新」提示
+      const [result] = await D.translate([text], D.config ? D.config.targetLang : 'zh-CN')
       if (token !== seq) return
       dst.className = 'dst'
       dst.textContent = result
@@ -142,7 +143,8 @@
     showIcon(lastRect)
   }
 
-  document.addEventListener(
+  D.listen(
+    document,
     'mouseup',
     (e) => {
       if (e.button !== 0 || inHost(e)) return
@@ -151,24 +153,29 @@
     },
     true,
   )
-  document.addEventListener(
+  D.listen(
+    document,
     'mousedown',
     (e) => {
       if (!inHost(e)) hideAll()
     },
     true,
   )
-  document.addEventListener(
+  D.listen(
+    document,
     'keydown',
     (e) => {
       if (e.key === 'Escape') hideAll()
     },
     true,
   )
-  window.addEventListener('scroll', hideAll, { capture: true, passive: true })
+  D.listen(window, 'scroll', hideAll, { capture: true, passive: true })
+  D.onDispose(() => host && host.remove())
 
-  chrome.runtime.onMessage.addListener((msg) => {
+  D.onMessage((msg, _sender, sendResponse) => {
     if (msg.type !== 'translateSelection') return
+    // 必须应答，否则后台会把「无应答」当作页面没有 content script
+    sendResponse({ ok: true })
     const sel = window.getSelection()
     const text = (msg.text || (sel ? sel.toString() : '')).trim()
     if (!text) return

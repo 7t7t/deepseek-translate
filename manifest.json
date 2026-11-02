@@ -37,7 +37,6 @@
       "matches": ["<all_urls>"],
       "js": [
         "lib/utils.js",
-        "lib/storage.js",
         "content/common.js",
         "content/page.js",
         "content/selection.js",

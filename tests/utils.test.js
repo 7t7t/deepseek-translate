@@ -79,6 +79,16 @@ test('buildBatches splits by chars and item count', () => {
   assert.deepEqual(u.buildBatches([]), [])
 })
 
+test('publicConfig hides apiKey from content scripts and exposes hasKey', () => {
+  const pub = u.publicConfig({ apiKey: 'sk-secret', targetLang: 'ja', alwaysSites: ['a.com'] })
+  assert.equal(pub.apiKey, undefined)
+  assert.equal(JSON.stringify(pub).includes('sk-secret'), false)
+  assert.equal(pub.hasKey, true)
+  assert.equal(pub.targetLang, 'ja')
+  assert.deepEqual(pub.alwaysSites, ['a.com'])
+  assert.equal(u.publicConfig({ apiKey: '' }).hasKey, false)
+})
+
 test('langName returns English name for prompts', () => {
   assert.equal(u.langName('zh-CN'), 'Simplified Chinese')
   assert.equal(u.langName('xx'), 'xx')

@@ -1,17 +1,38 @@
 ;(() => {
+  // 通知同一页面里的旧实例（扩展重载后遗留 / 重复注入）停止工作，DOM 事件可跨 isolated world
+  document.dispatchEvent(new CustomEvent('dst:dispose'))
+
   const D = (window.__DST__ = {})
+  const disposers = []
   D.utils = window.DST_UTILS
-  D.storage = window.DST_STORAGE
   D.config = null
   D.host = location.hostname
-  D.ready = D.storage.getConfig().then((cfg) => (D.config = cfg))
+  D.disposed = false
 
-  chrome.storage.onChanged.addListener((changes, area) => {
-    if (area !== 'local' || !D.config) return
-    for (const key of Object.keys(changes)) D.config[key] = changes[key].newValue
-  })
+  D.onDispose = (fn) => disposers.push(fn)
+  D.listen = (target, type, fn, options) => {
+    target.addEventListener(type, fn, options)
+    disposers.push(() => target.removeEventListener(type, fn, options))
+  }
+  D.onMessage = (fn) => {
+    chrome.runtime.onMessage.addListener(fn)
+    disposers.push(() => chrome.runtime.onMessage.removeListener(fn))
+  }
 
-  D.siteRule = () => D.utils.getSiteRule(D.host, D.config)
+  document.addEventListener(
+    'dst:dispose',
+    () => {
+      D.disposed = true
+      for (const fn of disposers.splice(0)) {
+        try {
+          fn()
+        } catch {
+          // 扩展上下文失效时移除监听可能抛错，忽略
+        }
+      }
+    },
+    { once: true },
+  )
 
   const INVALIDATED = '扩展已更新，请刷新页面'
 
@@ -31,6 +52,17 @@
     return res
   }
 
+  // 配置由后台提供（不含 API Key），content script 无法直接读取 storage
+  D.ready = D.send({ type: 'getConfig' }).then(
+    (res) => (D.config = res.config),
+    () => null,
+  )
+  D.onMessage((msg) => {
+    if (msg.type === 'configChanged') D.config = msg.config
+  })
+
+  D.siteRule = () => D.utils.getSiteRule(D.host, D.config)
+
   D.translate = async (texts, targetLang) => (await D.send({ type: 'translate', texts, targetLang })).results
 
   // 同一提示 5 秒内只显示一次，避免整页失败时刷屏
@@ -40,7 +72,7 @@
     if (text === last.text && now - last.at < 5000) return
     last = { text, at: now }
     const el = document.createElement('div')
-    el.className = 'dst-toast'
+    el.className = 'dst-root dst-toast'
     el.textContent = text
     document.documentElement.appendChild(el)
     setTimeout(() => el.remove(), 3000)

@@ -29,3 +29,12 @@ API Key 仅保存在本机 `chrome.storage.local`，翻译请求只由扩展后�
 npm test        # 运行 lib/ 单元测试（Node 22+，无依赖）
 npm run icons   # 重新生成图标
 ```
+
+content scripts 的浏览器测试：用假的 `chrome.*` 在普通网页里加载 content scripts。
+
+```bash
+python -m http.server 4123 --bind 127.0.0.1
+# 浏览器打开 http://127.0.0.1:4123/tests/browser/harness.html 手动试用
+# 自动场景（结果写在页面底部）：
+chrome --headless=new --virtual-time-budget=20000 --dump-dom "http://127.0.0.1:4123/tests/browser/harness.html?autotest"
+```
